@@ -40,7 +40,7 @@ interface BattleshipGrid {
      */
     fun removeOnGridChangeListener(listener: BattleshipGridListener)
 
-    fun interface BattleshipGridListener {
+    fun interface  BattleshipGridListener {
         /**
          * When the game is changed this method is called.
          *

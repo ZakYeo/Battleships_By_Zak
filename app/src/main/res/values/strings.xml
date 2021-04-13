@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Battleships</string>
+    <string name="appTitle">Battleships</string>
+    <string name="beginButton">BEGIN</string>
+    <string name="backButtonText">BACK</string>
+    <string name="enemy_grid">Enemy Grid</string>
 </resources>
