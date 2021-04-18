@@ -4,6 +4,7 @@ import uk.ac.bournemouth.ap.battleshiplib.*
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.BattleshipGridListener
 import uk.ac.bournemouth.ap.lib.matrix.Matrix
 import uk.ac.bournemouth.ap.lib.matrix.MutableMatrix
+import java.lang.IllegalArgumentException
 
 /**
  * This grid class describes the state of current guesses. It records which ships were sunk, where
@@ -22,7 +23,7 @@ open class StudentBattleshipGrid protected constructor(
     /**
      * Helper constructor for a fresh new game
      */
-    constructor(opponent: StudentBattleshipOpponent) : this(
+    constructor(opponent: StudentBattleshipOpponent = StudentBattleshipOpponent()) : this(
         MutableMatrix(
             opponent.columns,
             opponent.rows
@@ -108,22 +109,19 @@ open class StudentBattleshipGrid protected constructor(
      */
     override fun shootAt(columnGuess: Int, rowGuess: Int): GuessResult {
 
-        println(this[columnGuess, rowGuess])
-
-
         //TODO("Check that the coordinates are in range")
         if(columnGuess > this.columns || rowGuess > this.rows){
-            throw Exception("Coordinates not in range.")
+            throw IllegalArgumentException("Coordinates not in range.")
         }
         //TODO("Check that the coordinate has not been tried already for this game")
         if(guesses[columnGuess, rowGuess] != GuessCell.UNSET){
-            throw Exception("Coordinate already guessed!")
+            throw IllegalArgumentException("Coordinate already guessed!")
         }
 
 
 
         //TODO("Determine from the opponent which ship (or none) is at the location, the index matches the index in opponent.ships")
-        var shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(columnGuess, rowGuess)
+        val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(columnGuess, rowGuess)
         //TODO("Update the grid state, remembering that if a ship is sunk, all its cells should be sunk")
         if(shipInfo != null){
             guesses[columnGuess, rowGuess] = GuessCell.HIT(shipInfo.index)
@@ -157,5 +155,20 @@ open class StudentBattleshipGrid protected constructor(
 
         //TODO("Return the result of the action as a child of GuessResult")
     }
+
+    fun playRandomMove(): GuessResult?{
+        val columnTarget = (0 until columns).random()
+        val rowTarget = (0 until rows).random()
+
+        return try{
+            shootAt(columnTarget, rowTarget)
+        } catch(e: IllegalArgumentException){ //Randomly generated move is illegal, retry
+            playRandomMove()
+        } catch(e: Exception){ //Some kind of unknown error has occurred, so exit.
+            null
+        }
+    }
+
+
 
 }

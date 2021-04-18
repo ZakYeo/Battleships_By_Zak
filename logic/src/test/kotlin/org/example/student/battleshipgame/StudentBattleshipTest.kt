@@ -19,7 +19,7 @@ class StudentBattleshipTest : BattleshipTest() {
                 ship.right)
         }
 
-        return StudentBattleshipOpponent(rows, columns, studentShips)
+        return StudentBattleshipOpponent(studentShips, rows, columns)
     }
 
     override fun createOpponent(

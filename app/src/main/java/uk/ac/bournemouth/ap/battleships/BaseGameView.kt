@@ -9,7 +9,7 @@ import org.example.student.battleshipgame.StudentShip
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import kotlin.random.Random
 
-open class Game : View {
+open class BaseGameView : View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
@@ -18,19 +18,11 @@ open class Game : View {
             defStyleAttr
     )
 
-    private val colCount = 10
-    private val rowCount = 10
-
-
     private val listener: BattleshipGrid.BattleshipGridListener =
             BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
 
 
-    public var grid: StudentBattleshipGrid = StudentBattleshipGrid(
-            StudentBattleshipOpponent(
-                    rowCount, colCount, intArrayOf(6, 6), Random
-            )
-    ).apply {
+    var grid: StudentBattleshipGrid = StudentBattleshipGrid().apply {
         addOnGridChangeListener(listener)
     }
         set(value) {
@@ -41,12 +33,10 @@ open class Game : View {
             invalidate()
         }
 
-    public var opponentGrid: StudentBattleshipGrid = StudentBattleshipGrid(
-            StudentBattleshipOpponent(
-                    rowCount, colCount, intArrayOf(6, 6), Random
-            )).apply {
+    var opponentGrid: StudentBattleshipGrid = StudentBattleshipGrid().apply {
                 addOnGridChangeListener(listener)
             }
+
         set(value) {
             field.removeOnGridChangeListener(listener)
             field = value
@@ -55,22 +45,31 @@ open class Game : View {
             invalidate()
         }
 
-    fun shoot(column: Int, row: Int) {
-        var columnTarget = (0 until grid.columns).random()
-        var rowTarget = (0 until grid.rows).random()
+    var squareLength: Float = 0f
+    var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
+    var squareSpacing: Float = 0f
+
+    @Deprecated("Outdated")
+    fun shoot(column: Int, row: Int): Boolean {
+        val columnTarget = (0 until grid.columns).random()
+        val rowTarget = (0 until grid.rows).random()
 
         try {
             grid.shootAt(column, row)
 
         } catch (e: Exception) {
-            println("user Exception")
+            println("Exception from user grid")
+            return false //Unsuccessful turn
         }
 
         try {
             opponentGrid.shootAt(columnTarget, rowTarget)
         } catch (e: Exception) {
             println("opponent exception")
+            return false //Unsuccessful turn
         }
+
+        return true //Successful turn
     }
 
 

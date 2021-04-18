@@ -10,6 +10,10 @@ class BattleshipGameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_battleship_game)
 
+        val mainView = findViewById<BattleshipGameView>(R.id.battleshipGameView)
+        val opponentView = findViewById<BattleshipGameOpponentView>(R.id.battleshipGameOpponentView)
 
+        opponentView.grid = mainView.grid
+        opponentView.opponentGrid = mainView.opponentGrid
     }
 }

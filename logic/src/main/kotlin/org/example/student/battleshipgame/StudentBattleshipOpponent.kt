@@ -1,12 +1,16 @@
 package org.example.student.battleshipgame
 
 import sun.security.ec.point.ProjectivePoint
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_COLUMNS
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_ROWS
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_SHIP_SIZES
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent.ShipInfo
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.Ship
 import uk.ac.bournemouth.ap.lib.matrix.*
 import java.lang.IllegalArgumentException
+import javax.xml.bind.annotation.XmlType
 import kotlin.random.Random
 
 /**
@@ -17,7 +21,7 @@ import kotlin.random.Random
  * TODO Create a constructor that creates a game given dimensions and a list of placed ships
  * TODO Create a way to generate a random game
  */
-open class StudentBattleshipOpponent(rows: Int, columns: Int, ships: List<StudentShip>) : BattleshipOpponent {
+open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAULT_ROWS, columns: Int = DEFAULT_COLUMNS) : BattleshipOpponent {
 
     private val _rows: Int = rows
     private val _columns: Int = columns
@@ -31,6 +35,7 @@ open class StudentBattleshipOpponent(rows: Int, columns: Int, ships: List<Studen
     init{
         //Using a nested for loop and extension functions, verify the positions and sizes of the
         //ships.
+
         for(index in this._ships.indices){
             if(!this._ships[index].verify(this._rows, this._columns)){
                 throw Exception("Ship out of bounds or incorrect width.")
@@ -50,7 +55,7 @@ open class StudentBattleshipOpponent(rows: Int, columns: Int, ships: List<Studen
 
     }
 
-    constructor(rows: Int, columns: Int, shipSizes: IntArray, random: Random): this(rows, columns, emptyList()) {
+    constructor(rows: Int = DEFAULT_ROWS, columns: Int = DEFAULT_COLUMNS, shipSizes: IntArray = DEFAULT_SHIP_SIZES, random: Random = Random): this(emptyList(), rows, columns) {
 
         if(rows <= 0 || columns <= 0){
             throw Exception("Invalid grid size.")
@@ -83,7 +88,7 @@ open class StudentBattleshipOpponent(rows: Int, columns: Int, ships: List<Studen
 
                 if(isVertical){
                     left = random.nextInt(0, columns)
-                    right = left
+                    right = left //Vertical ship
                     top = random.nextInt(0, (rows-shipSize)+1)
                     bottom = top+shipSize-1
                 } else{
@@ -116,6 +121,7 @@ open class StudentBattleshipOpponent(rows: Int, columns: Int, ships: List<Studen
         }
         return null
     }
+
 
 }
 
