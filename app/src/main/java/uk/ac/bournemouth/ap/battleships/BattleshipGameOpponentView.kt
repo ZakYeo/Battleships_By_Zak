@@ -15,7 +15,7 @@ import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.Ship
 
 /**
- * TODO: document your custom view class.
+ *
  */
 class BattleshipGameOpponentView : BaseGameView {
     constructor(context: Context?) : super(context)
@@ -40,7 +40,7 @@ class BattleshipGameOpponentView : BaseGameView {
 
     private val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
-        color = Color.RED
+        color = Color.BLUE
     }
 
     private val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
@@ -69,12 +69,7 @@ class BattleshipGameOpponentView : BaseGameView {
     }
 
 
-
-
-
-
     override fun onDraw(canvas: Canvas) {
-        //super.onDraw(canvas)
 
         val gameWidth: Float = grid.columns * (squareLength+squareSpacing) + squareSpacing
         val gameHeight: Float = grid.rows * (squareLength+squareSpacing) + squareSpacing
@@ -98,15 +93,10 @@ class BattleshipGameOpponentView : BaseGameView {
                 } else if (shipInfo != null) {
                     if(opponentGrid[col, row] == GuessCell.HIT(shipInfo.index)){
                         canvas.drawRect(top, left, bot, right, hitPaint)
-                        println("opponent grid ship hit")
                     }else if(opponentGrid[col, row] == GuessCell.SUNK(shipInfo.index)){
                         canvas.drawRect(top, left, bot, right, sunkPaint)
-                        println("opponent grid ship sunk")
                     }
                 }
-
-
-
             }
         }
     }

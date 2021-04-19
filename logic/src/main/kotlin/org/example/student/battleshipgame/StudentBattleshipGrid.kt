@@ -10,9 +10,9 @@ import java.lang.IllegalArgumentException
  * This grid class describes the state of current guesses. It records which ships were sunk, where
  * shots were placed (with what results). It also records the [opponent](StudentBattleshipOpponent)
  *
- * @constructor Constructor that represents the actual state, this is needed when saving/loading
- *   the state.
- * @param guesses   The information on the ships in the grid.
+ * @constructor    Constructor that represents the actual state, this is needed when saving/loading
+ *                 the state.
+ * @param guesses  The information on the ships in the grid.
  * @param opponent The actual opponent information.
  */
 open class StudentBattleshipGrid protected constructor(
@@ -99,76 +99,79 @@ open class StudentBattleshipGrid protected constructor(
     }
 
     /**
-     * The get operator allows retrieving the guesses at a location. You probably want to just look
-     * the value up from a property you create (of type `MutableMatrix<GuessCell>`)
+     * The get operator allows retrieving the guesses at a location
      */
     override operator fun get(column: Int, row: Int): GuessCell = guesses[column, row]
 
     /**
      * This method is core to the game as it implements the actual gameplay (after initial setup).
+     * @param column The column to shoot at
+     * @param row The row to shoot at
+     *
+     * @return GuessResult The result of the state of the particular cell that has been shot.
+     *                     If no ship has been hit, GuessResult.MISS will be returned.
+     *                     Otherwise, GuessResult.HIT or .SUNK will be returned depending on
+     *                     if the ship is now sunk.
      */
-    override fun shootAt(columnGuess: Int, rowGuess: Int): GuessResult {
+    override fun shootAt(column: Int, row: Int): GuessResult {
 
-        //TODO("Check that the coordinates are in range")
-        if(columnGuess > this.columns || rowGuess > this.rows){
+        //Check that the coordinates are in range
+        if(column > this.columns || row > this.rows){
             throw IllegalArgumentException("Coordinates not in range.")
         }
-        //TODO("Check that the coordinate has not been tried already for this game")
-        if(guesses[columnGuess, rowGuess] != GuessCell.UNSET){
+        //Check that the coordinate has not been tried already for this game
+        if(guesses[column, row] != GuessCell.UNSET){
             throw IllegalArgumentException("Coordinate already guessed!")
         }
 
+        //Determine from the opponent which ship (or none) is at the location
+        val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(column, row)
 
+        //Update the grid state, remembering that if a ship is sunk, all its cells should be sunk
+        if(shipInfo != null){ //Ship hit
+            guesses[column, row] = GuessCell.HIT(shipInfo.index)
 
-        //TODO("Determine from the opponent which ship (or none) is at the location, the index matches the index in opponent.ships")
-        val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(columnGuess, rowGuess)
-        //TODO("Update the grid state, remembering that if a ship is sunk, all its cells should be sunk")
-        if(shipInfo != null){
-            guesses[columnGuess, rowGuess] = GuessCell.HIT(shipInfo.index)
-
-            for(row in opponent.ships[shipInfo.index].rowIndices){
-                for(column in opponent.ships[shipInfo.index].columnIndices){
-                    if(guesses[column, row] != GuessCell.HIT(shipInfo.index)){
-                        //guesses[columnGuess, rowGuess] = GuessCell.HIT(shipInfo.index)
-                        this.fireOnGridChangeEvent(columnGuess, rowGuess)
+            for(shipRow in opponent.ships[shipInfo.index].rowIndices){
+                for(shipColumn in opponent.ships[shipInfo.index].columnIndices){
+                    //Check all cells are marked as HIT. If they aren't, we can mark it as HIT.
+                    if(guesses[shipColumn, shipRow] != GuessCell.HIT(shipInfo.index)){
+                        this.fireOnGridChangeEvent(column, row)
                         return GuessResult.HIT(shipInfo.index)
                     }
                 }
             }
-
-            for(row in opponent.ships[shipInfo.index].rowIndices){
-                for(column in opponent.ships[shipInfo.index].columnIndices) {
-                    guesses[column, row] = GuessCell.SUNK(shipInfo.index)
-
+            //If all cells of the ship are marked as HIT, we should sink the ship.
+            for(shipRow in opponent.ships[shipInfo.index].rowIndices){
+                for(shipColumn in opponent.ships[shipInfo.index].columnIndices) {
+                    guesses[shipColumn, shipRow] = GuessCell.SUNK(shipInfo.index)
                 }
             }
             this.shipsSunk[shipInfo.index] = true
-            this.fireOnGridChangeEvent(columnGuess, rowGuess)
+            this.fireOnGridChangeEvent(column, row)
             return GuessResult.SUNK(shipInfo.index)
-        } else{
-            guesses[columnGuess, rowGuess] = GuessCell.MISS
-            this.fireOnGridChangeEvent(columnGuess, rowGuess)
+        } else{ //Missed ship
+            guesses[column, row] = GuessCell.MISS
+            this.fireOnGridChangeEvent(column, row)
             return GuessResult.MISS
         }
 
-
-
-        //TODO("Return the result of the action as a child of GuessResult")
     }
 
+    /**
+     * Acts as an "AI" and shoots at a random place on the grid. Works recursively
+     *
+     * @return GuessResult? Same return type as shootAt, except it may be null.
+     */
     fun playRandomMove(): GuessResult?{
         val columnTarget = (0 until columns).random()
         val rowTarget = (0 until rows).random()
-
+        println("playRandomMove called")
         return try{
             shootAt(columnTarget, rowTarget)
         } catch(e: IllegalArgumentException){ //Randomly generated move is illegal, retry
             playRandomMove()
-        } catch(e: Exception){ //Some kind of unknown error has occurred, so exit.
+        } catch(e: Exception){ //Some kind of other error has occurred, so exit.
             null
         }
     }
-
-
-
 }

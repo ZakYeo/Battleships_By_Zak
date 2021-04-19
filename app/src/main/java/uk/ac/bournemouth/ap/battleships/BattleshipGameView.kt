@@ -71,7 +71,6 @@ class BattleshipGameView : BaseGameView {
                 try {
                     grid.shootAt(columnTouched, rowTouched)
                 } catch (e: Exception) {
-                    println("Exception from user grid")
                     return false //Unsuccessful turn
                 }
 

@@ -9,6 +9,12 @@ import org.example.student.battleshipgame.StudentShip
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 import kotlin.random.Random
 
+/**
+ * Acts as a base view class that the two grid custom views inherit
+ *
+ * @property grid The user's battleship grid.
+ * @property opponentGrid The opponent's battleship grid.
+ */
 open class BaseGameView : View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -37,40 +43,17 @@ open class BaseGameView : View {
                 addOnGridChangeListener(listener)
             }
 
-        set(value) {
+        /*set(value) {
             field.removeOnGridChangeListener(listener)
             field = value
             value.addOnGridChangeListener(listener)
             onSizeChanged(width, height, width, height)
             invalidate()
-        }
+        }*/
 
     var squareLength: Float = 0f
     var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
     var squareSpacing: Float = 0f
-
-    @Deprecated("Outdated")
-    fun shoot(column: Int, row: Int): Boolean {
-        val columnTarget = (0 until grid.columns).random()
-        val rowTarget = (0 until grid.rows).random()
-
-        try {
-            grid.shootAt(column, row)
-
-        } catch (e: Exception) {
-            println("Exception from user grid")
-            return false //Unsuccessful turn
-        }
-
-        try {
-            opponentGrid.shootAt(columnTarget, rowTarget)
-        } catch (e: Exception) {
-            println("opponent exception")
-            return false //Unsuccessful turn
-        }
-
-        return true //Successful turn
-    }
 
 
 }

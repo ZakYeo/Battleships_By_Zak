@@ -1,27 +1,26 @@
 package org.example.student.battleshipgame
 
-import sun.security.ec.point.ProjectivePoint
+
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_COLUMNS
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_ROWS
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.Companion.DEFAULT_SHIP_SIZES
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent.ShipInfo
-import uk.ac.bournemouth.ap.battleshiplib.GuessCell
-import uk.ac.bournemouth.ap.battleshiplib.Ship
-import uk.ac.bournemouth.ap.lib.matrix.*
-import java.lang.IllegalArgumentException
-import javax.xml.bind.annotation.XmlType
 import kotlin.random.Random
 
 /**
- * Suggested starting point for implementing an opponent class. Please note that your constructor
- * should test that it gets correct parameters. These tests should not be done in the test driver,
- * but actually here.
+ * This opponent class handles the opponent side of things. Has game creation capabilities and holds
+ * the list of ships.
  *
- * TODO Create a constructor that creates a game given dimensions and a list of placed ships
- * TODO Create a way to generate a random game
+ * @constructor   Constructor that allows for game creation given dimensions and a list of placed ships
+ *
+ * @param ships   A list of all ships
+ * @param rows    Represents the number of rows in the grid
+ * @param columns Represents the number of columns in the grid
  */
-open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAULT_ROWS, columns: Int = DEFAULT_COLUMNS) : BattleshipOpponent {
+open class StudentBattleshipOpponent(ships: List<StudentShip>,
+                                     rows: Int = DEFAULT_ROWS,
+                                     columns: Int = DEFAULT_COLUMNS) : BattleshipOpponent {
 
     private val _rows: Int = rows
     private val _columns: Int = columns
@@ -33,18 +32,16 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAU
 
 
     init{
-        //Using a nested for loop and extension functions, verify the positions and sizes of the
-        //ships.
-
+        //Using a nested for loop and extension functions, verify the positions of the ships.
+        //No two ships may overlap, and all ships must be placed within the boundaries of the grid.
         for(index in this._ships.indices){
-            if(!this._ships[index].verify(this._rows, this._columns)){
-                throw Exception("Ship out of bounds or incorrect width.")
+            if(!this._ships[index].checkFitsInGrid(this._rows, this._columns)){
+                throw Exception("Ship out of bounds.")
             }
-
 
             for(indexTwo in 0 until index){
                 if(index == indexTwo){
-                    continue
+                    continue //The ship should not compare with itself, so skip.
                 }
                 if(this._ships[index].overlaps(this._ships[indexTwo])){
                     throw Exception("Ship overlaps.")
@@ -52,10 +49,22 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAU
             }
 
         }
-
     }
 
-    constructor(rows: Int = DEFAULT_ROWS, columns: Int = DEFAULT_COLUMNS, shipSizes: IntArray = DEFAULT_SHIP_SIZES, random: Random = Random): this(emptyList(), rows, columns) {
+    /**
+    * @constructor     Using the secondary constructor gives the ability to generate a random game
+    *                  by generating and placing ships in a brute-force fashion.
+    *
+    * @param rows      Represents the number of rows in the grid
+    * @param columns   Represents the number of columns in the grid
+    * @param shipSizes An int array filled with the sizes of each ship that should be placed.
+    *                  For example, a ship of size 5 will cover 5 squares on a grid.
+    * @param random    Allows for repeatable testing
+    */
+    constructor(rows: Int = DEFAULT_ROWS,
+                columns: Int = DEFAULT_COLUMNS,
+                shipSizes: IntArray = DEFAULT_SHIP_SIZES,
+                random: Random = Random): this(emptyList(), rows, columns) {
 
         if(rows <= 0 || columns <= 0){
             throw Exception("Invalid grid size.")
@@ -72,7 +81,7 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAU
 
         var isVertical: Boolean
 
-
+        //Brute force the placement of ships until an arrangement is found that works.
         for (shipSize in shipSizes) {
             do{
 
@@ -102,6 +111,7 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAU
                 newShip = StudentShip(top, left, bottom, right)
 
             }while(placedShips.any{it.overlaps(newShip)})
+            //Successful placement, so add our new ship into the list of placed ships.
             placedShips.add(newShip)
         }
         this._ships = placedShips.toList()
@@ -109,19 +119,20 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>, rows: Int = DEFAU
 
 
     /**
-     * Determine whether there is a ship at the given coordinate. If so, provide the shipInfo (index+ship)
-     * otherwise `null`.
+     * Determine whether there is a ship at the given coordinate
+     *
+     * @param column Represents the number of columns in the grid
+     * @param row    Represents the number of rows in the grid
+     *
+     * @return ShipInfo if found, otherwise null.
      */
-    //TODO("find which ship is at the coordinate. You can either search through the ships or look it up in a precalculated matrix")
     override fun shipAt(column: Int, row: Int): ShipInfo<StudentShip>? {
         ships.forEachIndexed { i, ship ->
             if (column in ship.columnIndices && row in ship.rowIndices) { // Ship hit
-                return ShipInfo(i, ship) //O(1) indexing
+                return ShipInfo(i, ship) //Allows O(1) indexing
             }
         }
         return null
     }
-
-
 }
 
