@@ -1,7 +1,12 @@
 <resources>
-    <string name="app_name">Battleships</string>
-    <string name="appTitle">Battleships</string>
+    <string name="app_name">BATTLESHIPS</string>
     <string name="beginButton">BEGIN</string>
     <string name="backButtonText">BACK</string>
+    <string name="rules">RULES</string>
+    <string name="high_scores">HIGH SCORES</string>
     <string name="enemy_grid">Enemy Grid</string>
+    <string name="your_grid">Your Grid</string>
+    <string name="battleship_image_description">Image of a battleship</string>
+    <color name="sea_blue">#0058AB</color>
+
 </resources>

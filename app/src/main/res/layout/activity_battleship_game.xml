@@ -4,52 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BattleshipGameActivity">
+    tools:context=".BattleshipGameActivity"
+    android:background="@color/sea_blue">
 
-    <uk.ac.bournemouth.ap.battleships.BattleshipGameView
-        android:id="@+id/battleshipGameView"
-        android:layout_width="235dp"
-        android:layout_height="219dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
-
-    <TextView
-        android:id="@+id/textView2"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="368dp"
-        android:text="@string/enemy_grid"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
-        android:text="Your Grid"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <uk.ac.bournemouth.ap.battleships.BattleshipGameOpponentView
-        android:id="@+id/battleshipGameOpponentView"
-        android:layout_width="218dp"
-        android:layout_height="176dp"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/yourGridText"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/your_grid"
+            android:textSize="24sp" />
+
+        <uk.ac.bournemouth.ap.battleships.BattleshipGameOpponentView
+            android:id="@+id/battleshipGameOpponentView"
+            android:layout_width="220dp"
+            android:layout_height="220dp" />
+
+        <TextView
+            android:id="@+id/opponentGridText"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="@string/enemy_grid"
+            android:textSize="24sp" />
+
+        <uk.ac.bournemouth.ap.battleships.BattleshipGameView
+            android:id="@+id/battleshipGameView"
+            android:layout_width="220dp"
+            android:layout_height="220dp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

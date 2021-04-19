@@ -1,6 +1,8 @@
 package uk.ac.bournemouth.ap.battleships
 
 import android.content.Context
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import org.example.student.battleshipgame.StudentBattleshipGrid
@@ -23,6 +25,30 @@ open class BaseGameView : View {
             attrs,
             defStyleAttr
     )
+    val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.FILL
+        color = Color.DKGRAY
+    }
+
+    val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.FILL
+        color = Color.GRAY
+    }
+
+    val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.FILL
+        color = Color.RED
+    }
+
+    val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.FILL
+        color = Color.GREEN
+    }
+
+    val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+        style = Paint.Style.FILL
+        color = Color.TRANSPARENT
+    }
 
     private val listener: BattleshipGrid.BattleshipGridListener =
             BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
@@ -54,6 +80,4 @@ open class BaseGameView : View {
     var squareLength: Float = 0f
     var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
     var squareSpacing: Float = 0f
-
-
 }

@@ -31,31 +31,6 @@ class BattleshipGameView : BaseGameView {
     var opponent = StudentBattleshipOpponent(grid.opponent.ships)
 
 
-    private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
-        style = Paint.Style.FILL
-        color = Color.DKGRAY
-    }
-
-    private val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
-        style = Paint.Style.FILL
-        color = Color.GRAY
-    }
-
-    private val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
-        style = Paint.Style.FILL
-        color = Color.RED
-    }
-
-    private val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
-        style = Paint.Style.FILL
-        color = Color.GREEN
-    }
-
-    private val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
-        style = Paint.Style.FILL
-        color = Color.TRANSPARENT
-    }
-
     private val gestureDetector = GestureDetectorCompat(context, object:
     GestureDetector.SimpleOnGestureListener() {
         override fun onDown(e: MotionEvent): Boolean {
