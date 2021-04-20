@@ -7,42 +7,72 @@
     tools:context=".BattleshipGameActivity"
     android:background="@color/sea_blue">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/yourGridText"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_margin="16dp"
+        android:gravity="center"
+        android:text="@string/your_grid"
+        android:textColor="#000000"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/yourGridText"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/your_grid"
-            android:textSize="24sp" />
+    <uk.ac.bournemouth.ap.battleships.BattleshipGameOpponentView
+        android:id="@+id/battleshipGameOpponentView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/middleGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/yourGridText" />
 
-        <uk.ac.bournemouth.ap.battleships.BattleshipGameOpponentView
-            android:id="@+id/battleshipGameOpponentView"
-            android:layout_width="220dp"
-            android:layout_height="220dp" />
+    <uk.ac.bournemouth.ap.battleships.BattleshipGameView
+        android:id="@+id/battleshipGameView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/battleshipGameBackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/opponentGridText" />
 
-        <TextView
-            android:id="@+id/opponentGridText"
-            android:gravity="center"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
-            android:text="@string/enemy_grid"
-            android:textSize="24sp" />
+    <Button
+        android:id="@+id/battleshipGameBackButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="@string/backButtonText"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#000000"
+        app:backgroundTint="#6662C2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <uk.ac.bournemouth.ap.battleships.BattleshipGameView
-            android:id="@+id/battleshipGameView"
-            android:layout_width="220dp"
-            android:layout_height="220dp" />
-    </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/middleGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.40" />
+
+    <TextView
+        android:id="@+id/opponentGridText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/enemy_grid"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintTop_toBottomOf="@id/middleGuideline"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

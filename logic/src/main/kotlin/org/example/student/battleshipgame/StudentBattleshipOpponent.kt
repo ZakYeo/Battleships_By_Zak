@@ -36,6 +36,11 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
         //No two ships may overlap, and all ships must be placed within the boundaries of the grid.
         for(index in this._ships.indices){
             if(!this._ships[index].checkFitsInGrid(this._rows, this._columns)){
+                println("Ship does not fit in grid")
+                println(this._ships[index].top)
+                println(this._ships[index].bottom)
+                println(this._ships[index].left)
+                println(this._ships[index].right)
                 throw Exception("Ship out of bounds.")
             }
 

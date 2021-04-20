@@ -1,15 +1,16 @@
 package uk.ac.bournemouth.ap.battleships
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import org.example.student.battleshipgame.StudentBattleshipGrid
 import org.example.student.battleshipgame.StudentBattleshipOpponent
-import org.example.student.battleshipgame.StudentShip
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
-import kotlin.random.Random
+
 
 /**
  * Acts as a base view class that the two grid custom views inherit
@@ -21,10 +22,16 @@ open class BaseGameView : View {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-            context,
-            attrs,
-            defStyleAttr
+        context,
+        attrs,
+        defStyleAttr
     )
+
+    val pref = context.getSharedPreferences("BattleshipsPref", 0)
+
+    var columnSize =  pref.getInt("column_size", 10)
+    var rowSize = pref.getInt("row_size", 10)
+
     val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.DKGRAY
@@ -54,7 +61,8 @@ open class BaseGameView : View {
             BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
 
 
-    var grid: StudentBattleshipGrid = StudentBattleshipGrid().apply {
+    var grid: StudentBattleshipGrid =
+        StudentBattleshipGrid(StudentBattleshipOpponent(rowSize, columnSize)).apply {
         addOnGridChangeListener(listener)
     }
         set(value) {
@@ -65,17 +73,10 @@ open class BaseGameView : View {
             invalidate()
         }
 
-    var opponentGrid: StudentBattleshipGrid = StudentBattleshipGrid().apply {
+    var opponentGrid: StudentBattleshipGrid =
+        StudentBattleshipGrid(StudentBattleshipOpponent(rowSize, columnSize)).apply {
                 addOnGridChangeListener(listener)
             }
-
-        /*set(value) {
-            field.removeOnGridChangeListener(listener)
-            field = value
-            value.addOnGridChangeListener(listener)
-            onSizeChanged(width, height, width, height)
-            invalidate()
-        }*/
 
     var squareLength: Float = 0f
     var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f

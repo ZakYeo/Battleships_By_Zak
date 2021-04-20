@@ -28,7 +28,9 @@ class BattleshipGameView : BaseGameView {
         defStyleAttr
     )
 
-    var opponent = StudentBattleshipOpponent(grid.opponent.ships)
+    private var offsetX: Float = 0f
+    private var offsetY: Float = 0f
+    var opponent = StudentBattleshipOpponent(grid.opponent.ships, columnSize, rowSize)
 
 
     private val gestureDetector = GestureDetectorCompat(context, object:
@@ -40,8 +42,8 @@ class BattleshipGameView : BaseGameView {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
 
             if (e != null && !grid.shipsSunk.all{ it } && !opponentGrid.shipsSunk.all{ it }) {
-                val columnTouched = ((e.x - squareLength * squareSpacingRatio) / (squareLength + squareSpacing)).toInt()
-                val rowTouched = ((e.y - squareLength * squareSpacingRatio) / (squareLength + squareSpacing)).toInt()
+                val columnTouched = (((e.x - squareLength * squareSpacingRatio)-offsetX) / (squareLength + squareSpacing)).toInt()
+                val rowTouched = (((e.y - squareLength * squareSpacingRatio)-offsetY) / (squareLength + squareSpacing)).toInt()
 
                 try {
                     grid.shootAt(columnTouched, rowTouched)
@@ -51,13 +53,11 @@ class BattleshipGameView : BaseGameView {
 
                 opponentGrid.playRandomMove() ?: return false
 
-                //val intent = Intent(context, MainActivity::class.java)
                 if(grid.shipsSunk.all{ it }){ //Player has won
                     gameWon().show()
-                    //context.startActivity(intent)
                 }else if(opponentGrid.shipsSunk.all{ it }){ //Computer has won
                     gameWon(1).show()
-                    //context.startActivity(intent)
+
                 }
             }
             return super.onSingleTapUp(e)
@@ -78,17 +78,15 @@ class BattleshipGameView : BaseGameView {
 
         squareLength = minOf(cellW, cellH)
         squareSpacing = squareLength*squareSpacingRatio
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val size = measuredWidth.coerceAtMost(measuredHeight)
-        setMeasuredDimension(size, size)
+        val gridWidth = grid.columns*(squareLength+squareSpacing)+squareSpacing
+        val gridHeight = grid.rows*(squareLength+squareSpacing)+squareSpacing
+        offsetX = (width-gridWidth) / 2
+        offsetY = (height-gridHeight) / 2
     }
 
 
     override fun onDraw(canvas: Canvas) {
-
+        canvas.translate(offsetX, offsetY)
         val gameWidth: Float = grid.columns * (squareLength+squareSpacing) + squareSpacing
         val gameHeight: Float = grid.rows * (squareLength+squareSpacing) + squareSpacing
         canvas.drawRect(0f, 0f, gameWidth, gameHeight, gridPaint)

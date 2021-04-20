@@ -2,11 +2,21 @@
     <string name="app_name">BATTLESHIPS</string>
     <string name="beginButton">BEGIN</string>
     <string name="backButtonText">BACK</string>
-    <string name="rules">RULES</string>
+    <string name="rules">RULES / SETTINGS</string>
     <string name="high_scores">HIGH SCORES</string>
     <string name="enemy_grid">Enemy Grid</string>
     <string name="your_grid">Your Grid</string>
     <string name="battleship_image_description">Image of a battleship</string>
     <color name="sea_blue">#0058AB</color>
+    <string name="rules_full">• Battleships is a strategy game for two players
+        \n\n<br/><br/>
+    • Players alternate turns in attempting to guess the position of the opposing player\'s ships
+        \n\n<br/><br/>
+    • Once all ships have been sunk on a single grid, that player is declared the winner
+        \n\n<br/><br/></string>
+    <string name="change_grid_size">To modify the size of the grid, enter the size below
+        (min 5x5, max 10x10, default 10x10):</string>
+    <string name="columns">COLUMNS</string>
+    <string name="rows">ROWS</string>
 
 </resources>

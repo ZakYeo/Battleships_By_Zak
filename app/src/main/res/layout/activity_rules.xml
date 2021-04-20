@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".RulesActivity"
     android:background="@color/sea_blue">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -18,42 +17,56 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/rulesTitleText"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#0058AB"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/app_name"
+            android:text="@string/rules"
             android:textColor="#000000"
             android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/beginButton"
+        <TextView
+            android:id="@+id/rulesBodyText"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="#0003A9F4"
+            android:text="@string/rules_full"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/editGridsizeText"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:text="@string/beginButton"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:layout_height="wrap_content"
+            android:text="@string/change_grid_size"
             android:textColor="#000000"
-            app:backgroundTint="#6662C2" />
+            android:gravity="center"/>
+
+        <EditText
+            android:id="@+id/columnsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/columns"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/rowsEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:hint="@string/rows"
+            android:inputType="number" />
 
         <Button
-            android:id="@+id/highScoresButton"
+            android:id="@+id/rulesBackButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:text="@string/backButtonText"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
-            android:text="@string/high_scores"
-            app:backgroundTint="#6662C2" />
-
-        <Button
-            android:id="@+id/rulesButton"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#000000"
-            android:text="@string/rules"
             app:backgroundTint="#6662C2" />
 
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

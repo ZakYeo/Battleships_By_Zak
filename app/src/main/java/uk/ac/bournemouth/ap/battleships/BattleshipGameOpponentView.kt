@@ -26,7 +26,9 @@ class BattleshipGameOpponentView : BaseGameView {
             defStyleAttr
     )
 
-    var opponent = StudentBattleshipOpponent(opponentGrid.opponent.ships)
+    private var offsetY: Float = 0f
+    private var offsetX: Float = 0f
+    var opponent = StudentBattleshipOpponent(opponentGrid.opponent.ships, columnSize, rowSize)
 
 
 
@@ -36,17 +38,16 @@ class BattleshipGameOpponentView : BaseGameView {
 
         squareLength = minOf(cellW, cellH)
         squareSpacing = squareLength*squareSpacingRatio
-    }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-        val size = measuredWidth.coerceAtMost(measuredHeight)
-        setMeasuredDimension(size, size)
+        val gridWidth = grid.columns*(squareLength+squareSpacing)+squareSpacing
+        val gridHeight = grid.rows*(squareLength+squareSpacing)+squareSpacing
+        offsetX = (width-gridWidth) / 2
+        offsetY = (height-gridHeight) / 2
     }
 
 
     override fun onDraw(canvas: Canvas) {
-
+        canvas.translate(offsetX, offsetY)
         val gameWidth: Float = grid.columns * (squareLength+squareSpacing) + squareSpacing
         val gameHeight: Float = grid.rows * (squareLength+squareSpacing) + squareSpacing
         canvas.drawRect(0f, 0f, gameWidth, gameHeight, gridPaint)

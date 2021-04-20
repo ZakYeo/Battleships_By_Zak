@@ -44,7 +44,7 @@ fun Ship.overlaps(shipToCompare: Ship): Boolean{
  * @return Boolean to represent if the ship fits inside the given grid size
  */
 fun Ship.checkFitsInGrid(rows: Int, columns: Int): Boolean {
-    if (this.bottom > rows - 1 || this.top < 0 || this.left < 0 || this.right > columns - 1) {
+    if (this.bottom > rows -1 || this.top < 0 || this.left < 0 || this.right > columns - 1) {
         return false
     }
     return true
