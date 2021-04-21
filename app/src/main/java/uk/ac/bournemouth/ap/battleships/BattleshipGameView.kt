@@ -30,7 +30,7 @@ class BattleshipGameView : BaseGameView {
 
     private var offsetX: Float = 0f
     private var offsetY: Float = 0f
-    var opponent = StudentBattleshipOpponent(grid.opponent.ships, columnSize, rowSize)
+    var opponent = StudentBattleshipOpponent(grid.opponent.ships, rowSize, columnSize)
 
 
     private val gestureDetector = GestureDetectorCompat(context, object:
@@ -51,7 +51,8 @@ class BattleshipGameView : BaseGameView {
                     return false //Unsuccessful turn
                 }
 
-                opponentGrid.playRandomMove() ?: return false
+                //opponentGrid.playRandomMove() ?: return false
+                opponentGrid.playMove(5)
 
                 if(grid.shipsSunk.all{ it }){ //Player has won
                     gameWon().show()

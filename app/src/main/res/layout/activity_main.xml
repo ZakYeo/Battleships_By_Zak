@@ -21,6 +21,7 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="16dp"
             android:background="#0058AB"
             android:gravity="center"
             android:text="@string/app_name"
@@ -31,6 +32,7 @@
             android:id="@+id/beginButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_margin="16dp"
             android:text="@string/beginButton"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
@@ -40,18 +42,20 @@
             android:id="@+id/highScoresButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:text="@string/high_scores"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
-            android:text="@string/high_scores"
             app:backgroundTint="#6662C2" />
 
         <Button
             android:id="@+id/rulesButton"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:layout_margin="16dp"
+            android:text="@string/rules"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
-            android:text="@string/rules"
             app:backgroundTint="#6662C2" />
 
     </LinearLayout>

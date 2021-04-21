@@ -28,7 +28,7 @@ class BattleshipGameOpponentView : BaseGameView {
 
     private var offsetY: Float = 0f
     private var offsetX: Float = 0f
-    var opponent = StudentBattleshipOpponent(opponentGrid.opponent.ships, columnSize, rowSize)
+    var opponent = StudentBattleshipOpponent(opponentGrid.opponent.ships, rowSize, columnSize)
 
 
 

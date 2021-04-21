@@ -41,6 +41,9 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
                 println(this._ships[index].bottom)
                 println(this._ships[index].left)
                 println(this._ships[index].right)
+                println("does not fit in grid: ")
+                println(this._rows)
+                println(this._columns)
                 throw Exception("Ship out of bounds.")
             }
 

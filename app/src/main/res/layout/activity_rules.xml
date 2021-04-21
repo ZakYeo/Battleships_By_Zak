@@ -20,6 +20,7 @@
             android:id="@+id/rulesTitleText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:gravity="center"
             android:text="@string/rules"
             android:textColor="#000000"
@@ -27,7 +28,7 @@
 
         <TextView
             android:id="@+id/rulesBodyText"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#0003A9F4"
             android:text="@string/rules_full"
@@ -37,9 +38,10 @@
             android:id="@+id/editGridsizeText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:gravity="center"
             android:text="@string/change_grid_size"
-            android:textColor="#000000"
-            android:gravity="center"/>
+            android:textColor="#000000" />
 
         <EditText
             android:id="@+id/columnsEditText"
@@ -69,4 +71,5 @@
             app:backgroundTint="#6662C2" />
 
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

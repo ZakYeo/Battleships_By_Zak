@@ -5,6 +5,9 @@ import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.BattleshipGridListener
 import uk.ac.bournemouth.ap.lib.matrix.Matrix
 import uk.ac.bournemouth.ap.lib.matrix.MutableMatrix
 import java.lang.IllegalArgumentException
+import kotlin.math.ln
+import kotlin.math.log10
+import kotlin.random.Random
 
 /**
  * This grid class describes the state of current guesses. It records which ships were sunk, where
@@ -129,32 +132,36 @@ open class StudentBattleshipGrid protected constructor(
 
         //Update the grid state, remembering that if a ship is sunk, all its cells should be sunk
         if(shipInfo != null){ //Ship hit
-            guesses[column, row] = GuessCell.HIT(shipInfo.index)
-
-            for(shipRow in opponent.ships[shipInfo.index].rowIndices){
-                for(shipColumn in opponent.ships[shipInfo.index].columnIndices){
-                    //Check all cells are marked as HIT. If they aren't, we can mark it as HIT.
-                    if(guesses[shipColumn, shipRow] != GuessCell.HIT(shipInfo.index)){
-                        this.fireOnGridChangeEvent(column, row)
-                        return GuessResult.HIT(shipInfo.index)
-                    }
-                }
-            }
-            //If all cells of the ship are marked as HIT, we should sink the ship.
-            for(shipRow in opponent.ships[shipInfo.index].rowIndices){
-                for(shipColumn in opponent.ships[shipInfo.index].columnIndices) {
-                    guesses[shipColumn, shipRow] = GuessCell.SUNK(shipInfo.index)
-                }
-            }
-            this.shipsSunk[shipInfo.index] = true
-            this.fireOnGridChangeEvent(column, row)
-            return GuessResult.SUNK(shipInfo.index)
+            return shipHit(shipInfo, column, row)
         } else{ //Missed ship
             guesses[column, row] = GuessCell.MISS
             this.fireOnGridChangeEvent(column, row)
             return GuessResult.MISS
         }
 
+    }
+
+    fun shipHit(shipHitInfo: BattleshipOpponent.ShipInfo<Ship>, column: Int, row: Int): GuessResult{
+        guesses[column, row] = GuessCell.HIT(shipHitInfo.index)
+
+        for(shipRow in opponent.ships[shipHitInfo.index].rowIndices){
+            for(shipColumn in opponent.ships[shipHitInfo.index].columnIndices){
+                //Check all cells are marked as HIT. If they aren't, we can mark it as HIT.
+                if(guesses[shipColumn, shipRow] != GuessCell.HIT(shipHitInfo.index)){
+                    this.fireOnGridChangeEvent(column, row)
+                    return GuessResult.HIT(shipHitInfo.index)
+                }
+            }
+        }
+        //If all cells of the ship are marked as HIT, we should sink the ship.
+        for(shipRow in opponent.ships[shipHitInfo.index].rowIndices){
+            for(shipColumn in opponent.ships[shipHitInfo.index].columnIndices) {
+                guesses[shipColumn, shipRow] = GuessCell.SUNK(shipHitInfo.index)
+            }
+        }
+        this.shipsSunk[shipHitInfo.index] = true
+        this.fireOnGridChangeEvent(column, row)
+        return GuessResult.SUNK(shipHitInfo.index)
     }
 
     /**
@@ -165,7 +172,6 @@ open class StudentBattleshipGrid protected constructor(
     fun playRandomMove(): GuessResult?{
         val columnTarget = (0 until columns).random()
         val rowTarget = (0 until rows).random()
-        println("playRandomMove called")
         return try{
             shootAt(columnTarget, rowTarget)
         } catch(e: IllegalArgumentException){ //Randomly generated move is illegal, retry
@@ -173,5 +179,34 @@ open class StudentBattleshipGrid protected constructor(
         } catch(e: Exception){ //Some kind of other error has occurred, so exit.
             null
         }
+    }
+
+    fun playMove(difficulty: Int): GuessResult? {
+
+        if(difficulty < 1 || difficulty > 10){
+            throw Exception("Difficulty must be between 1 and 10.")
+        }
+
+        //This variable represents the probability the AI will guess a correct cell
+        //Based on the difficulty level
+        //e.g, if the difficulty is 1 (easy) the shots will always be random
+        //e.g if the difficulty is 10 (hardest) the shots will always be on target
+        val probabilityOfGuaranteedCorrectGuess = log10(difficulty.toDouble())
+        val random = Random.nextFloat()
+
+        if(guesses.all{ it is GuessCell.UNSET || it is GuessCell.MISS} || random > probabilityOfGuaranteedCorrectGuess){
+            //Shoot randomly until the first cell is hit, or probable outcome
+            return playRandomMove()
+        }
+
+        for(column in 0 until columns){
+            for(row in 0 until rows){
+                val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(column, row)
+                if(shipInfo != null && guesses[column, row] is GuessCell.UNSET){ //ship hit
+                    return shootAt(column, row)
+                }
+            }
+        }
+        return null
     }
 }
