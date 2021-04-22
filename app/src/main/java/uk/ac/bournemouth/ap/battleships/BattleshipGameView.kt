@@ -20,6 +20,11 @@ import uk.ac.bournemouth.ap.battleshiplib.GuessResult
 import uk.ac.bournemouth.ap.battleshiplib.Ship
 import java.lang.IllegalArgumentException
 
+/**
+ * This custom view represent the player's grid. It has on touch functionality that allows cells on
+ * the grid to be shot at, and has turn-taking functionality. Also checks if the game has been won,
+ * and if it has, disallow the game to continue.
+ */
 class BattleshipGameView : BaseGameView {
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -29,8 +34,7 @@ class BattleshipGameView : BaseGameView {
         defStyleAttr
     )
 
-    private var offsetX: Float = 0f
-    private var offsetY: Float = 0f
+
     var opponent = StudentBattleshipOpponent(grid.opponent.ships, rowSize, columnSize)
 
 
@@ -40,6 +44,12 @@ class BattleshipGameView : BaseGameView {
             return true
         }
 
+        /**
+         * When this view is touched by the player, the cell touched will be "shot" at. If there is
+         * a ship at this location, score will be increased by a certain amount based on difficulty.
+         * After the player has had a turn, the "AI" will automatically make a move in response.
+         * If all ships have been sunk by either player, the game will finish.
+         */
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
 
             if (e != null && !grid.shipsSunk.all{ it } && !opponentGrid.shipsSunk.all{ it }) {
@@ -50,13 +60,14 @@ class BattleshipGameView : BaseGameView {
                     grid.score += (100)*difficulty
                 }
 
+                //Player's turn
                 try {
                     grid.shootAt(columnTouched, rowTouched)
                 } catch (e: Exception) {
                     return false //Unsuccessful turn
                 }
 
-
+                //Opponent's turn
                 opponentGrid.playMove(difficulty)
 
                 if(grid.shipsSunk.all{ it }){ //Player has won
@@ -90,7 +101,10 @@ class BattleshipGameView : BaseGameView {
         offsetY = (height-gridHeight) / 2
     }
 
-
+    /**
+     * Actually draws a grid onto the screen. Uses rectangles and paints them a certain colour
+     * to represent the state of that cell.
+     */
     override fun onDraw(canvas: Canvas) {
         canvas.translate(offsetX, offsetY)
         val gameWidth: Float = grid.columns * (squareLength+squareSpacing) + squareSpacing
@@ -105,28 +119,27 @@ class BattleshipGameView : BaseGameView {
                 val bot = top + squareLength
                 val right = left + squareLength
 
-                val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(col, row)
-
-
-                //TODO Use a when statement instead of if
-                if(grid[col, row] == GuessCell.UNSET){
-                    canvas.drawRect(top, left, bot, right, noPlayerPaint)
-                } else if(grid[col, row] == GuessCell.MISS){
-                    canvas.drawRect(top, left, bot, right, missPaint)
-                } else if (shipInfo != null) {
-                    if(grid[col, row] == GuessCell.HIT(shipInfo.index)){
-                        canvas.drawRect(top, left, bot, right, hitPaint)
-                    }else if(grid[col, row] == GuessCell.SUNK(shipInfo.index)){
-                        canvas.drawRect(top, left, bot, right, sunkPaint)
-                    }
+                when(grid[col, row]) {
+                    is GuessCell.UNSET -> canvas.drawRect(top, left, bot, right, noPlayerPaint)
+                    is GuessCell.MISS -> canvas.drawRect(top, left, bot, right, missPaint)
+                    is GuessCell.HIT -> canvas.drawRect(top, left, bot, right, hitPaint)
+                    is GuessCell.SUNK -> canvas.drawRect(top, left, bot, right, sunkPaint)
+                    else -> continue
                 }
+
             }
         }
 
     }
 
+    /**
+     * Displays a snackbar to notify the player who has won.
+     *
+     * @param player 0 - This is the player
+     *               1 - This is the opponent
+     */
     fun gameWon(player: Int = 0): Snackbar{
-        val message: String = if(player == 0){ //You
+        val message: String = if(player == 0){ //Player
             "You have won!"
         } else if(player == 1){ //Opponent
             "You have lost!"

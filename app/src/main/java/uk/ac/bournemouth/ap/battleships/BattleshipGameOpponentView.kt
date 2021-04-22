@@ -15,7 +15,7 @@ import uk.ac.bournemouth.ap.battleshiplib.GuessCell
 import uk.ac.bournemouth.ap.battleshiplib.Ship
 
 /**
- *
+ * This custom view represents the opponent
  */
 class BattleshipGameOpponentView : BaseGameView {
     constructor(context: Context?) : super(context)
@@ -25,12 +25,6 @@ class BattleshipGameOpponentView : BaseGameView {
             attrs,
             defStyleAttr
     )
-
-    private var offsetY: Float = 0f
-    private var offsetX: Float = 0f
-    var opponent = StudentBattleshipOpponent(opponentGrid.opponent.ships, rowSize, columnSize)
-
-
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int){
         val cellW = (w / (grid.columns + (grid.columns + 1) * squareSpacingRatio))
@@ -60,20 +54,14 @@ class BattleshipGameOpponentView : BaseGameView {
                 val bot = top + squareLength
                 val right = left + squareLength
 
-                val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(col, row)
-
-                //TODO Use a when statement instead of if
-                if(opponentGrid[col, row] == GuessCell.UNSET){
-                    canvas.drawRect(top, left, bot, right, noPlayerPaint)
-                } else if(opponentGrid[col, row] == GuessCell.MISS){
-                    canvas.drawRect(top, left, bot, right, missPaint)
-                } else if (shipInfo != null) {
-                    if(opponentGrid[col, row] == GuessCell.HIT(shipInfo.index)){
-                        canvas.drawRect(top, left, bot, right, hitPaint)
-                    }else if(opponentGrid[col, row] == GuessCell.SUNK(shipInfo.index)){
-                        canvas.drawRect(top, left, bot, right, sunkPaint)
-                    }
+                when(opponentGrid[col, row]) {
+                    is GuessCell.UNSET -> canvas.drawRect(top, left, bot, right, noPlayerPaint)
+                    is GuessCell.MISS -> canvas.drawRect(top, left, bot, right, missPaint)
+                    is GuessCell.HIT -> canvas.drawRect(top, left, bot, right, hitPaint)
+                    is GuessCell.SUNK -> canvas.drawRect(top, left, bot, right, sunkPaint)
+                    else -> continue
                 }
+
             }
         }
     }

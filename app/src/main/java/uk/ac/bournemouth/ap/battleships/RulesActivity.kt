@@ -9,7 +9,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 
 /**
- *
+ * Activity to act as a rules and settings menu. Here the user can read the rules, and modify game
+ * settings
  */
 class RulesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

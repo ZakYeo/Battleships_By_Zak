@@ -8,6 +8,9 @@ import android.widget.Button
 import android.widget.TextView
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
 
+/**
+ * Acts as the activity where the battleships game takes place.
+ */
 class BattleshipGameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +29,9 @@ class BattleshipGameActivity : AppCompatActivity() {
         val scoreTextView = findViewById<TextView>(R.id.opponentGridText)
         scoreTextView.text = opponentGridString.plus(" | SCORE: ").plus(mainView.grid.score)
 
+        //This listener is used to allow the UI to keep an up-to-date score on screen.
         val listener: BattleshipGrid.BattleshipGridListener =
-                BattleshipGrid.BattleshipGridListener { grid, column, row ->
+                BattleshipGrid.BattleshipGridListener { _, _, _ ->
                     scoreTextView.text = opponentGridString.plus(" | SCORE: ").plus(mainView.grid.score)
                 }
         mainView.grid.apply{addOnGridChangeListener(listener)}

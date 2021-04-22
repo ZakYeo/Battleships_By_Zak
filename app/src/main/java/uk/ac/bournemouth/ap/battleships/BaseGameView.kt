@@ -2,6 +2,7 @@ package uk.ac.bournemouth.ap.battleships
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
@@ -10,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import org.example.student.battleshipgame.StudentBattleshipGrid
 import org.example.student.battleshipgame.StudentBattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
+import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
+import uk.ac.bournemouth.ap.battleshiplib.GuessCell
+import uk.ac.bournemouth.ap.battleshiplib.Ship
 
 
 /**
@@ -17,6 +21,9 @@ import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
  *
  * @property grid The user's battleship grid.
  * @property opponentGrid The opponent's battleship grid.
+ * @property difficulty Represents the difficulty the game is currently set to.
+ * @property columnSize The current number of columns the game is using
+ * @property rowSize The current number of rows the game is using
  */
 open class BaseGameView : View {
     constructor(context: Context?) : super(context)
@@ -28,42 +35,50 @@ open class BaseGameView : View {
     )
 
     private val pref: SharedPreferences = context.getSharedPreferences("BattleshipsPref", 0)
+
     val difficulty = pref.getInt("difficulty", Context.MODE_PRIVATE)
 
     var columnSize =  pref.getInt("column_size", 10)
     var rowSize = pref.getInt("row_size", 10)
 
-    val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    protected var offsetX: Float = 0f
+    protected var offsetY: Float = 0f
+
+    protected val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.DKGRAY
     }
 
-    val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    protected val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.GRAY
     }
 
-    val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    protected val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.RED
     }
 
-    val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    protected val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.GREEN
     }
 
-    val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    protected val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.TRANSPARENT
     }
 
+
+    //Create a listener for our grid
     private val listener: BattleshipGrid.BattleshipGridListener =
-            BattleshipGrid.BattleshipGridListener { grid, column, row -> invalidate() }
+            BattleshipGrid.BattleshipGridListener { _, _, _ -> invalidate() }
 
+    private val opponent = StudentBattleshipOpponent(rowSize, columnSize)
 
+    //Initialise the player's grid
     var grid: StudentBattleshipGrid =
-        StudentBattleshipGrid(StudentBattleshipOpponent(rowSize, columnSize)).apply {
+        StudentBattleshipGrid(opponent).apply {
         addOnGridChangeListener(listener)
     }
         set(value) {
@@ -74,12 +89,17 @@ open class BaseGameView : View {
             invalidate()
         }
 
+    //Initialise the opponent's grid
     var opponentGrid: StudentBattleshipGrid =
-        StudentBattleshipGrid(StudentBattleshipOpponent(rowSize, columnSize)).apply {
+        StudentBattleshipGrid(opponent).apply {
                 addOnGridChangeListener(listener)
             }
 
-    var squareLength: Float = 0f
-    var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
-    var squareSpacing: Float = 0f
+    //Variables for drawing the grid
+    protected var squareLength: Float = 0f
+    protected var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
+    protected var squareSpacing: Float = 0f
+
+
+
 }
