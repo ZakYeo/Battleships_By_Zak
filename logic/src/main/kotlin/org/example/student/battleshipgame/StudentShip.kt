@@ -45,8 +45,6 @@ fun Ship.overlaps(shipToCompare: Ship): Boolean{
  */
 fun Ship.checkFitsInGrid(rows: Int, columns: Int): Boolean {
     if (this.bottom > rows - 1 || this.top < 0 || this.left < 0 || this.right > columns - 1) {
-        println(this.bottom > rows-1)
-        println(this.right > columns - 1)
         return false
     }
     return true

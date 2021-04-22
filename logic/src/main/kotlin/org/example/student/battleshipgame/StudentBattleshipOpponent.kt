@@ -83,16 +83,16 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
 
         //Brute force the placement of ships until an arrangement is found that works.
         for (shipSize in shipSizes) {
-            do{
 
-                isVertical = if(shipSize < rows && shipSize < columns){
-                    randomizer.nextBoolean() //Random orientation
-                }else if(shipSize >= columns){
-                    true //Force vertical
-                }else if(shipSize >= rows){
-                    false //Force horizontal
-                }else{
-                    throw Exception("Ship cannot fit.")
+            isVertical = when {
+                shipSize >= columns -> true
+                shipSize >= rows -> false
+                else -> randomizer.nextBoolean()
+            }
+
+            do{
+                if(shipSize < rows && shipSize < columns){
+                    isVertical = randomizer.nextBoolean()
                 }
 
                 if(isVertical){
@@ -106,7 +106,6 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
                     left = random.nextInt(0, (columns-shipSize)+1)
                     right = left+shipSize-1
                 }
-
 
                 newShip = StudentShip(top, left, bottom, right)
 
