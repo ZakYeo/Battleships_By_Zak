@@ -32,8 +32,18 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
-            android:textSize="25sp"
-            android:textColor="#000000" />
+            android:text="@string/high_scores_empty"
+            android:textColor="#000000"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:text="@string/reset"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="#000000"
+            app:backgroundTint="#6662C2" />
 
         <Button
             android:id="@+id/highScoresBackButton"
@@ -43,6 +53,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#000000"
             app:backgroundTint="#6662C2" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

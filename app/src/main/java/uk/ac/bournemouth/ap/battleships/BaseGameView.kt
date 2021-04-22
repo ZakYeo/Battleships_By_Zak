@@ -31,6 +31,7 @@ open class BaseGameView : View {
         defStyleAttr
     )
 
+    //Shared preferences allows for saving key variables
     protected val pref: SharedPreferences = context.getSharedPreferences("BattleshipsPref", 0)
 
     val difficulty = pref.getInt("difficulty", Context.MODE_PRIVATE)
@@ -109,7 +110,13 @@ open class BaseGameView : View {
         offsetY = (height-gridHeight) / 2
     }
 
-
+    /**
+     * Actually draws a grid onto the screen. Uses rectangles and paints them a certain colour
+     * to represent the state of that cell.
+     *
+     * @param canvas The Canvas used to draw
+     * @param gridToUse The grid used for painting the cells
+     */
     fun drawGrid(canvas: Canvas, gridToUse: StudentBattleshipGrid){
         canvas.translate(offsetX, offsetY)
         val gameWidth: Float = gridToUse.columns * (squareLength+squareSpacing) + squareSpacing

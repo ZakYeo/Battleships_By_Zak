@@ -87,10 +87,6 @@ class BattleshipGameView : BaseGameView {
     }
 
 
-    /**
-     * Actually draws a grid onto the screen. Uses rectangles and paints them a certain colour
-     * to represent the state of that cell.
-     */
     override fun onDraw(canvas: Canvas) {
         drawGrid(canvas, grid)
 

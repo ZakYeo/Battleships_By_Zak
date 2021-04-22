@@ -150,6 +150,9 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
      * Additional feature. This method will move chosen ships a given distance. It will chose
      * the direction randomly and if that direction is not valid (overlapping or out of bounds) it
      * will try another. If no movement is valid it will not move.
+     *
+     * @param distance The amount of cells the ships should move each
+     * @param shipsChosen List of ships to move
      */
     fun moveShipsRandomly(distance: Int, shipsChosen: List<StudentShip> = _ships){
 

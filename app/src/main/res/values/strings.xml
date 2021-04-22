@@ -23,5 +23,7 @@
     <string name="image_description">Main battleship image</string>
     <string name="first_high_score">1:</string>
     <string name="_2">2:</string>
+    <string name="reset">RESET</string>
+    <string name="high_scores_empty">1) 0\n2) 0\n3) 0</string>
 
 </resources>
