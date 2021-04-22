@@ -7,13 +7,10 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import org.example.student.battleshipgame.StudentBattleshipGrid
 import org.example.student.battleshipgame.StudentBattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid
-import uk.ac.bournemouth.ap.battleshiplib.BattleshipOpponent
 import uk.ac.bournemouth.ap.battleshiplib.GuessCell
-import uk.ac.bournemouth.ap.battleshiplib.Ship
 
 
 /**
@@ -44,27 +41,27 @@ open class BaseGameView : View {
     protected var offsetX: Float = 0f
     protected var offsetY: Float = 0f
 
-    protected val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private val gridPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.DKGRAY
     }
 
-    protected val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private val noPlayerPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.GRAY
     }
 
-    protected val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private val missPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.RED
     }
 
-    protected val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private val hitPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.GREEN
     }
 
-    protected val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
+    private val sunkPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply{
         style = Paint.Style.FILL
         color = Color.TRANSPARENT
     }
@@ -99,6 +96,45 @@ open class BaseGameView : View {
     protected var squareLength: Float = 0f
     protected var squareSpacingRatio = ((grid.columns + grid.rows) / 100f) * 1.2f
     protected var squareSpacing: Float = 0f
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int){
+        val cellW = (w / (grid.columns + (grid.columns + 1) * squareSpacingRatio))
+        val cellH = (h / (grid.rows + (grid.rows + 1) * squareSpacingRatio))
+
+        squareLength = minOf(cellW, cellH)
+        squareSpacing = squareLength*squareSpacingRatio
+        val gridWidth = grid.columns*(squareLength+squareSpacing)+squareSpacing
+        val gridHeight = grid.rows*(squareLength+squareSpacing)+squareSpacing
+        offsetX = (width-gridWidth) / 2
+        offsetY = (height-gridHeight) / 2
+    }
+
+
+    fun drawGrid(canvas: Canvas, gridToUse: StudentBattleshipGrid){
+        canvas.translate(offsetX, offsetY)
+        val gameWidth: Float = gridToUse.columns * (squareLength+squareSpacing) + squareSpacing
+        val gameHeight: Float = gridToUse.rows * (squareLength+squareSpacing) + squareSpacing
+        canvas.drawRect(0f, 0f, gameWidth, gameHeight, gridPaint)
+
+
+        for (col in 0 until gridToUse.columns) {
+            for (row in 0 until gridToUse.rows) {
+                val top = (0 + (squareSpacing * (col+1) + (squareLength * col)))
+                val left = (0 + (squareSpacing * (row+1) + (squareLength * row)))
+                val bot = top + squareLength
+                val right = left + squareLength
+
+                when(gridToUse[col, row]) {
+                    is GuessCell.UNSET -> canvas.drawRect(top, left, bot, right, noPlayerPaint)
+                    is GuessCell.MISS -> canvas.drawRect(top, left, bot, right, missPaint)
+                    is GuessCell.HIT -> canvas.drawRect(top, left, bot, right, hitPaint)
+                    is GuessCell.SUNK -> canvas.drawRect(top, left, bot, right, sunkPaint)
+                    else -> continue
+                }
+
+            }
+        }
+    }
 
 
 

@@ -53,6 +53,5 @@ class StudentBattleshipTest : BattleshipTest() {
         }
 
         return StudentBattleshipGame(studentGrids)
-        //return TODO("Create a new StudentBattleshipGame with the studentGrids as parameter")
     }
 }

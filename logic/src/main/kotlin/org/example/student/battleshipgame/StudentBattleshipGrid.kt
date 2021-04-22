@@ -5,7 +5,6 @@ import uk.ac.bournemouth.ap.battleshiplib.BattleshipGrid.BattleshipGridListener
 import uk.ac.bournemouth.ap.lib.matrix.Matrix
 import uk.ac.bournemouth.ap.lib.matrix.MutableMatrix
 import java.lang.IllegalArgumentException
-import kotlin.math.ln
 import kotlin.math.log10
 import kotlin.random.Random
 

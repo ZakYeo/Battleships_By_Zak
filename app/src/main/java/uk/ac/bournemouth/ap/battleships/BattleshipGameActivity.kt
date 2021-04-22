@@ -37,5 +37,6 @@ class BattleshipGameActivity : AppCompatActivity() {
         mainView.grid.apply{addOnGridChangeListener(listener)}
 
         mainView.opponentGrid = opponentView.opponentGrid
+
     }
 }
