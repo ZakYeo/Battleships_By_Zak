@@ -52,7 +52,7 @@ class BattleshipGameView : BaseGameView {
                 } else{
                     try{
                         grid.score -= (100)*(difficulty/3)
-                    }catch(e: Exception){
+                    }catch(e: Exception){ //Score cannot be negative, so set it to 0.
                         grid.score = 0
                     }
 
@@ -105,7 +105,29 @@ class BattleshipGameView : BaseGameView {
     fun gameWon(player: Int = 0): Snackbar{
         val message: String = when (player) {
             0 -> { //Player
+                val firstHighScore = pref.getInt("firstHighScore", 0)
+                val secondHighScore = pref.getInt("secondHighScore", 0)
+                val thirdHighScore = pref.getInt("thirdHighScore", 0)
+                val editor = pref.edit()
+
+                when{
+                    grid.score > firstHighScore -> { //Change highscores, and make sure they cascade
+                        editor.putInt("firstHighScore", grid.score)
+                        editor.putInt("secondHighScore", firstHighScore)
+                        editor.putInt("thirdHighScore", secondHighScore)
+                    }
+                    grid.score > secondHighScore -> {
+                        editor.putInt("secondHighScore", grid.score)
+                        editor.putInt("thirdHighScore", secondHighScore)
+                    }
+                    grid.score > thirdHighScore -> {editor.putInt("thirdHighScore", grid.score)}
+                }
+
+                editor.apply()
+
+
                 "You have won!"
+
             }
             1 -> { //Opponent
                 "You have lost!"

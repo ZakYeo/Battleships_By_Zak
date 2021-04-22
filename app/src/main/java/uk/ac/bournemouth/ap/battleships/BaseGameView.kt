@@ -31,7 +31,7 @@ open class BaseGameView : View {
         defStyleAttr
     )
 
-    private val pref: SharedPreferences = context.getSharedPreferences("BattleshipsPref", 0)
+    protected val pref: SharedPreferences = context.getSharedPreferences("BattleshipsPref", 0)
 
     val difficulty = pref.getInt("difficulty", Context.MODE_PRIVATE)
 

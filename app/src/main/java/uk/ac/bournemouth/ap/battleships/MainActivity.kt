@@ -15,16 +15,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val beginButton = findViewById<Button>(R.id.beginButton)
+        val highScoresButton = findViewById<Button>(R.id.highScoresButton)
+        val rulesButton = findViewById<Button>(R.id.rulesButton)
+
         beginButton.setOnClickListener{
             val intent = Intent(this, BattleshipGameActivity::class.java)
             startActivity(intent)
         }
 
-        val rulesButton = findViewById<Button>(R.id.rulesButton)
+        highScoresButton.setOnClickListener{
+            val intent = Intent(this, HighScoresActivity::class.java)
+            startActivity(intent)
+        }
+
         rulesButton.setOnClickListener{
             val intent = Intent(this, RulesActivity::class.java)
             startActivity(intent)
         }
+
+
 
 
     }

@@ -9,9 +9,9 @@
     <string name="battleship_image_description">Image of a battleship</string>
     <color name="sea_blue">#0058AB</color>
     <string name="rules_full">• Battleships is a strategy game for two players
-        \n\n<br/><br/>
+        \n\n<br /><br />
     • Players alternate turns in attempting to guess the position of the opposing player\'s ships
-        \n\n<br/><br/>
+        \n\n<br /><br />
     • Once all ships have been sunk on a single grid, that player is declared the winner</string>
     <string name="change_grid_size">To modify the size of the grid, enter the size below
         (min 5x5, max 30x30, default 10x10, rectangles also work):</string>
@@ -21,5 +21,7 @@
     1 being easy, and 10 being the most difficult. Note that difficulty acts as a score multiplier!</string>
     <string name="difficulty_hint">DIFFICULTY</string>
     <string name="image_description">Main battleship image</string>
+    <string name="first_high_score">1:</string>
+    <string name="_2">2:</string>
 
 </resources>
