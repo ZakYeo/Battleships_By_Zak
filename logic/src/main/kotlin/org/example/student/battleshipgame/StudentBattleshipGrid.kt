@@ -33,6 +33,9 @@ open class StudentBattleshipGrid protected constructor(
         ) { _, _ -> GuessCell.UNSET }, opponent
     )
 
+    /**
+     * Acts as a tally to keep "score"
+     */
     var score: Int = 0
         set(value){
         if(value < 0){

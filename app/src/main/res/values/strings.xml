@@ -18,7 +18,7 @@
     <string name="columns">COLUMNS</string>
     <string name="rows">ROWS</string>
     <string name="difficulty_text">To change the difficulty, enter a number between 1 and 10.
-    1 being easy, and 10 being the most difficult.</string>
+    1 being easy, and 10 being the most difficult. Note that difficulty acts as a score multiplier!</string>
     <string name="difficulty_hint">DIFFICULTY</string>
     <string name="image_description">Main battleship image</string>
 
