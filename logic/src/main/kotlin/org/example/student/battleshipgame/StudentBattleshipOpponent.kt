@@ -30,8 +30,20 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
     override val columns: Int get() = this._columns
     override val ships: List<StudentShip> get() = this._ships
 
+    companion object Direction {
+        const val UP = "UP"
+        const val DOWN = "DOWN"
+        const val LEFT = "LEFT"
+        const val RIGHT = "RIGHT"
+    }
+
 
     init{
+        validateShips()
+    }
+
+
+    private fun validateShips(){
         //Using a nested for loop and extension functions, verify the positions of the ships.
         //No two ships may overlap, and all ships must be placed within the boundaries of the grid.
         for(index in this._ships.indices){
@@ -133,5 +145,87 @@ open class StudentBattleshipOpponent(ships: List<StudentShip>,
         }
         return null
     }
+
+    /**
+     * Additional feature. This method will move chosen ships a given distance. It will chose
+     * the direction randomly and if that direction is not valid (overlapping or out of bounds) it
+     * will try another. If no movement is valid it will not move.
+     */
+    fun moveShipsRandomly(distance: Int, shipsChosen: List<StudentShip> = _ships){
+
+        var directions: MutableList<String>
+        var newPositionConfirmed: Boolean
+        for(ship in shipsChosen){
+
+            directions = mutableListOf(UP, DOWN, LEFT, RIGHT)
+
+            val currentTop = ship.top
+            val currentBot = ship.bottom
+            val currentLeft = ship.left
+            val currentRight = ship.right
+
+
+            newPositionConfirmed = false
+            do {
+
+                if(directions.size == 0){
+                    break //Every direction tried and failed, so skip this ship.
+                }
+
+                when (directions.random()) {
+                    UP -> {
+                        ship.top -= distance
+                        ship.bottom -= distance
+                        try{
+                            validateShips() //Check if this new position is valid
+                            newPositionConfirmed = true
+                        } catch(e: Exception){ //Invalid, so revert changes and remove UP as a direction
+                            ship.top = currentTop
+                            ship.bottom = currentBot
+                            directions.remove(UP)
+                        }
+                    }
+                    DOWN -> {
+                        ship.top += distance
+                        ship.bottom += distance
+                        try{
+                            validateShips()
+                            newPositionConfirmed = true
+                        } catch(e: Exception){
+                            ship.top = currentTop
+                            ship.bottom = currentBot
+                            directions.remove(DOWN)
+                        }
+                    }
+                    LEFT -> {
+                        ship.left -= distance
+                        ship.right -= distance
+
+                        try{
+                            validateShips()
+                            newPositionConfirmed = true
+                        } catch(e: Exception){
+                            ship.left = currentLeft
+                            ship.right = currentRight
+                            directions.remove(LEFT)
+                        }
+                    }
+                    RIGHT -> {
+                        ship.left += distance
+                        ship.right += distance
+                        try{
+                            validateShips()
+                            newPositionConfirmed = true
+                        } catch(e: Exception){
+                            ship.left = currentLeft
+                            ship.right = currentRight
+                            directions.remove(RIGHT)
+                        }
+                    }
+                }
+            }while(!newPositionConfirmed)
+        }
+    }
+
 }
 

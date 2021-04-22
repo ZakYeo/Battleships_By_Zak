@@ -12,8 +12,8 @@ import uk.ac.bournemouth.ap.battleshiplib.Ship
  *  @param bottom The bottom-most cell of the ship
  *  @param right  The right-most cell of the ship.
  */
-class StudentShip(override val top: Int, override val left: Int, override val bottom: Int,
-                       override val right: Int): Ship {
+class StudentShip(override var top: Int, override var left: Int, override var bottom: Int,
+                  override var right: Int): Ship {
     init {
         if(bottom < top || right < left){ //Inverted dimensions not allowed
             throw Exception("Inverted dimensions not allowed")

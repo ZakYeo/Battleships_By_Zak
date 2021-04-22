@@ -18,7 +18,6 @@ class StudentBattleshipTest : BattleshipTest() {
                 ship.bottom,
                 ship.right)
         }
-
         return StudentBattleshipOpponent(studentShips, rows, columns)
     }
 
