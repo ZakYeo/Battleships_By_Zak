@@ -27,7 +27,8 @@ open class BaseGameView : View {
         defStyleAttr
     )
 
-    val pref = context.getSharedPreferences("BattleshipsPref", 0)
+    private val pref: SharedPreferences = context.getSharedPreferences("BattleshipsPref", 0)
+    val difficulty = pref.getInt("difficulty", Context.MODE_PRIVATE)
 
     var columnSize =  pref.getInt("column_size", 10)
     var rowSize = pref.getInt("row_size", 10)

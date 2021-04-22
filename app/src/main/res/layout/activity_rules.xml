@@ -50,7 +50,8 @@
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/columns"
-            android:inputType="number" />
+            android:inputType="number"
+            android:gravity="center" />
 
         <EditText
             android:id="@+id/rowsEditText"
@@ -59,7 +60,27 @@
             android:autofillHints=""
             android:ems="10"
             android:hint="@string/rows"
-            android:inputType="number" />
+            android:inputType="number"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/editDifficultyText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/difficulty_text"
+            android:layout_margin="8dp"
+            android:gravity="center"
+            android:textColor="#000000" />
+
+        <EditText
+            android:id="@+id/difficultyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="@string/difficulty_hint"
+            android:gravity="center"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/rulesBackButton"

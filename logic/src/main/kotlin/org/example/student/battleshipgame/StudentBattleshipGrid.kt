@@ -33,6 +33,13 @@ open class StudentBattleshipGrid protected constructor(
         ) { _, _ -> GuessCell.UNSET }, opponent
     )
 
+    var score: Int = 0
+        set(value){
+        if(value < 0){
+            throw Exception("Score cannot be lower than 0.")
+        }
+        field = value
+    }
 
     /**
      * A list of listeners that should be informed if the game state changes.
@@ -131,17 +138,18 @@ open class StudentBattleshipGrid protected constructor(
         val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(column, row)
 
         //Update the grid state, remembering that if a ship is sunk, all its cells should be sunk
-        if(shipInfo != null){ //Ship hit
-            return shipHit(shipInfo, column, row)
+        return if(shipInfo != null){ //Ship hit
+            shipHit(shipInfo, column, row)
         } else{ //Missed ship
             guesses[column, row] = GuessCell.MISS
             this.fireOnGridChangeEvent(column, row)
-            return GuessResult.MISS
+            GuessResult.MISS
         }
 
     }
 
-    fun shipHit(shipHitInfo: BattleshipOpponent.ShipInfo<Ship>, column: Int, row: Int): GuessResult{
+    //Private function to handle the hitting of a ship
+    private fun shipHit(shipHitInfo: BattleshipOpponent.ShipInfo<Ship>, column: Int, row: Int): GuessResult{
         guesses[column, row] = GuessCell.HIT(shipHitInfo.index)
 
         for(shipRow in opponent.ships[shipHitInfo.index].rowIndices){
@@ -165,11 +173,11 @@ open class StudentBattleshipGrid protected constructor(
     }
 
     /**
-     * Acts as an "AI" and shoots at a random place on the grid. Works recursively
+     * Shoots at a random place on the grid. Works recursively. Can be called through playMove(1)
      *
-     * @return GuessResult? Same return type as shootAt, except it may be null.
+     * @return GuessResult Same return type as shootAt, except it may be null.
      */
-    fun playRandomMove(): GuessResult?{
+    private fun playRandomMove(): GuessResult?{
         val columnTarget = (0 until columns).random()
         val rowTarget = (0 until rows).random()
         return try{
@@ -181,6 +189,16 @@ open class StudentBattleshipGrid protected constructor(
         }
     }
 
+    /**
+     * This function acts as an "AI". Increased difficulty means a higher probability the "AI" will
+     * guess a correct cell. The probability is calculated using a simple formula involving log10.
+     * This means difficulty must be bigger than or equal to 1, and less than or equal to 10.
+     *
+     * @param difficulty 1 represents perfectly random, 10 represents perfect playing. Anything
+     *                   in-between has a probable outcome.
+     *
+     * @return GuessResult Same return type as shootAt, except it may be null.
+     */
     fun playMove(difficulty: Int): GuessResult? {
 
         if(difficulty < 1 || difficulty > 10){
@@ -189,20 +207,20 @@ open class StudentBattleshipGrid protected constructor(
 
         //This variable represents the probability the AI will guess a correct cell
         //Based on the difficulty level
-        //e.g, if the difficulty is 1 (easy) the shots will always be random
-        //e.g if the difficulty is 10 (hardest) the shots will always be on target
-        val probabilityOfGuaranteedCorrectGuess = log10(difficulty.toDouble())
-        val random = Random.nextFloat()
+        val probabilityOfGuaranteedCorrectGuess = 1-log10(11-difficulty.toDouble())
+        val random = Random.nextFloat() //Random double between 0 and 1.
 
-        if(guesses.all{ it is GuessCell.UNSET || it is GuessCell.MISS} || random > probabilityOfGuaranteedCorrectGuess){
-            //Shoot randomly until the first cell is hit, or probable outcome
+        //guesses.all{ it is GuessCell.UNSET || it is GuessCell.MISS} ||
+        if(random > probabilityOfGuaranteedCorrectGuess){
+            //Unsuccessful probable outcome; play a random move.
             return playRandomMove()
         }
 
+        //Successful probable outcome:
         for(column in 0 until columns){
             for(row in 0 until rows){
                 val shipInfo: BattleshipOpponent.ShipInfo<Ship>? = opponent.shipAt(column, row)
-                if(shipInfo != null && guesses[column, row] is GuessCell.UNSET){ //ship hit
+                if(shipInfo != null && guesses[column, row] is GuessCell.UNSET){ //ship found
                     return shootAt(column, row)
                 }
             }

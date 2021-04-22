@@ -62,17 +62,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.40" />
+        app:layout_constraintGuide_begin="293dp" />
 
     <TextView
         android:id="@+id/opponentGridText"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/enemy_grid"
         android:textColor="#000000"
         android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@id/middleGuideline"
-        tools:layout_editor_absoluteX="16dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGuideline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

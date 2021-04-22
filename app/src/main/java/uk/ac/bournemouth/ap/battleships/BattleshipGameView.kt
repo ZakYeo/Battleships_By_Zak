@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.widget.TextView
 import androidx.core.view.GestureDetectorCompat
 import com.google.android.material.snackbar.Snackbar
 import org.example.student.battleshipgame.StudentBattleshipOpponent
@@ -42,8 +43,12 @@ class BattleshipGameView : BaseGameView {
         override fun onSingleTapUp(e: MotionEvent?): Boolean {
 
             if (e != null && !grid.shipsSunk.all{ it } && !opponentGrid.shipsSunk.all{ it }) {
-                val columnTouched = (((e.x - squareLength * squareSpacingRatio)-offsetX) / (squareLength + squareSpacing)).toInt()
+                val columnTouched =  (((e.x - squareLength * squareSpacingRatio)-offsetX) / (squareLength + squareSpacing)).toInt()
                 val rowTouched = (((e.y - squareLength * squareSpacingRatio)-offsetY) / (squareLength + squareSpacing)).toInt()
+
+                if(opponent.shipAt(columnTouched, rowTouched) != null){ //There is a ship here
+                    grid.score += (100)*difficulty
+                }
 
                 try {
                     grid.shootAt(columnTouched, rowTouched)
@@ -51,8 +56,8 @@ class BattleshipGameView : BaseGameView {
                     return false //Unsuccessful turn
                 }
 
-                //opponentGrid.playRandomMove() ?: return false
-                opponentGrid.playMove(5)
+
+                opponentGrid.playMove(difficulty)
 
                 if(grid.shipsSunk.all{ it }){ //Player has won
                     gameWon().show()
