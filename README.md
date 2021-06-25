@@ -1,7 +1,9 @@
 # Battleships By Zak |  22/04/2021
 
 
-This project is battleships coded in Android Studio using Kotlin. The logic & UI are fully functional and some additional features have been implemented.<br>
+This project is battleships coded in Android Studio using Kotlin.
+
+This project was an assignment for university and was my first time using Kotlin and Android Studio in such a manner.<br>
 
 <h1>Additional Logic Features:</h1>
   <h2>A better computer player</h2>
